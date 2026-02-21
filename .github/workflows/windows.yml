@@ -1,0 +1,75 @@
+name: Windows
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Windows x64
+    runs-on: windows-latest
+
+    env:
+      SOLUTION_FILE_PATH: .\DarkRadiant.sln
+      BUILD_CONFIGURATION: Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject commit hash in version.h
+        env:
+          VERSION_HEADER_FILE: include\version.h
+          SHA: ${{ github.sha }}
+        run: |
+          $sha = $env:SHA.Substring(0, 7)
+          Write-Host "Writing $sha to $env:VERSION_HEADER_FILE"
+          $replaced = Get-Content $env:VERSION_HEADER_FILE | % {
+            if ($_ -match '#define RADIANT_VERSION "((\d+.\d+.\d+)([\w\d]*))"') {
+              $_.Replace($matches[1], $matches[2] + "_rev$sha")
+            } else { $_ }
+          }
+          $replaced | Out-File $env:VERSION_HEADER_FILE
+        shell: powershell
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
+
+      - name: Build
+        run: >
+          msbuild /m
+          /p:Configuration=${{ env.BUILD_CONFIGURATION }}
+          /p:Platform=x64
+          /maxcpucount:4
+          /nodeReuse:false
+          /p:UseSharedConfiguration=false
+          ${{ env.SOLUTION_FILE_PATH }}
+
+      - name: Generate portable package
+        run: |
+          powershell -ExecutionPolicy ByPass .\compile_release_package.ps1 -Platform x64 -SkipBuild -GenerateSetupPackage:$false -GeneratePortablePackage:$false -OutputFolder ..\..\PortablePackage\
+        shell: cmd
+        working-directory: .\tools\scripts
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hellforge-windows-x64
+          path: |
+            tools/scripts/DarkRadiant_install.x64/**/*
+            !tools/scripts/DarkRadiant_install.x64/**/*.pdb
+
+      - name: Upload PDB files
+        uses: actions/upload-artifact@v4
+        with:
+          name: hellforge-windows-x64-pdb
+          path: tools/scripts/DarkRadiant_install.x64/**/*.pdb

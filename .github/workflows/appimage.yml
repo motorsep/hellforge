@@ -1,0 +1,72 @@
+name: AppImage
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: appimage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: AppImage x86_64
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository -y ppa:sjr/wx32
+          sudo apt-get update
+          sudo apt-get install -yq --no-install-recommends \
+            build-essential cmake pkg-config gettext \
+            zlib1g-dev libjpeg-dev libxml2-dev libsigc++-2.0-dev \
+            libeigen3-dev libwxgtk3.2-dev libpng-dev \
+            libftgl-dev libglew-dev libalut-dev libvorbis-dev \
+            python3-dev libgit2-dev libglib2.0-dev \
+            libfuse2
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INSTALL_PREFIX=/usr
+          -DENABLE_RELOCATION=ON
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Create AppDir
+        run: |
+          DESTDIR=${{ github.workspace }}/AppDir cmake --build build --target install
+
+          # Desktop file needs a relative Exec path for AppImage
+          sed -i 's|Exec=.*/hellforge.*|Exec=hellforge|' \
+            AppDir/usr/share/applications/io.github.klaussilveira.hellforge.desktop
+
+      - name: Build AppImage
+        run: |
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+
+          # linuxdeploy needs to find the project's own shared libraries
+          export LD_LIBRARY_PATH="${{ github.workspace }}/AppDir/usr/lib/x86_64-linux-gnu/hellforge:${LD_LIBRARY_PATH}"
+
+          ./linuxdeploy-x86_64.AppImage \
+            --appdir AppDir \
+            --desktop-file AppDir/usr/share/applications/io.github.klaussilveira.hellforge.desktop \
+            --icon-file AppDir/usr/share/icons/hicolor/128x128/apps/io.github.klaussilveira.hellforge.png \
+            --output appimage
+
+          rm linuxdeploy-x86_64.AppImage
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hellforge-appimage-x86_64
+          path: "*.AppImage"

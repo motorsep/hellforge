@@ -187,6 +187,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\radiant\camera\CameraWndManager.cpp" />
+    <ClCompile Include="..\..\radiant\camera\tools\CameraBrushCreatorTool.cpp" />
     <ClCompile Include="..\..\radiant\camera\tools\DecalShooterTool.cpp" />
     <ClCompile Include="..\..\radiant\camera\tools\FaceIntersectionFinder.cpp" />
     <ClCompile Include="..\..\radiant\clipboard\ClipboardModule.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="..\..\radiant\selection\SelectionMouseTools.cpp" />
     <ClCompile Include="..\..\radiant\settings\LocalisationModule.cpp" />
     <ClCompile Include="..\..\radiant\settings\LocalisationProvider.cpp" />
+    <ClCompile Include="..\..\radiant\settings\RenderingQualitySettings.cpp" />
     <ClCompile Include="..\..\radiant\settings\Win32Registry.cpp" />
     <ClCompile Include="..\..\radiant\textool\tools\TextureToolManipulateMouseTool.cpp" />
     <ClCompile Include="..\..\radiant\ui\aas\AasFileControl.cpp" />
@@ -277,6 +279,7 @@
     <ClCompile Include="..\..\radiant\ui\materials\MaterialChooser.cpp" />
     <ClCompile Include="..\..\radiant\ui\materials\MaterialPopulator.cpp" />
     <ClCompile Include="..\..\radiant\ui\materials\MaterialSelector.cpp" />
+    <ClCompile Include="..\..\radiant\ui\materials\MaterialThumbnailBrowser.cpp" />
     <ClCompile Include="..\..\radiant\ui\materials\MaterialTreeView.cpp" />
     <ClCompile Include="..\..\radiant\ui\mediabrowser\MediaBrowserModule.cpp" />
     <ClCompile Include="..\..\radiant\ui\mediabrowser\MediaBrowserTreeView.cpp" />
@@ -359,6 +362,7 @@
     <ClCompile Include="..\..\radiant\ui\texturebrowser\MapTextureBrowser.cpp" />
     <ClCompile Include="..\..\radiant\ui\texturebrowser\TextureBrowserManager.cpp" />
     <ClCompile Include="..\..\radiant\ui\texturebrowser\TextureBrowserPanel.cpp" />
+    <ClCompile Include="..\..\radiant\ui\terrain\TerrainGeneratorDialog.cpp" />
     <ClCompile Include="..\..\radiant\ui\texturebrowser\TextureThumbnailBrowser.cpp" />
     <ClCompile Include="..\..\radiant\ui\toolbar\ToolbarManager.cpp" />
     <ClCompile Include="..\..\radiant\ui\splash\Splash.cpp" />
@@ -387,6 +391,7 @@
     <ClInclude Include="..\..\radiant\camera\tools\ObjectFinder.h" />
     <ClInclude Include="..\..\radiant\camera\tools\PanViewTool.h" />
     <ClInclude Include="..\..\radiant\camera\tools\ShaderClipboardTools.h" />
+    <ClInclude Include="..\..\radiant\camera\tools\CameraBrushCreatorTool.h" />
     <ClInclude Include="..\..\radiant\camera\tools\DecalShooterTool.h" />
     <ClInclude Include="..\..\radiant\camera\tools\FaceIntersectionFinder.h" />
     <ClInclude Include="..\..\radiant\clipboard\ClipboardModule.h" />
@@ -413,6 +418,7 @@
     <ClInclude Include="..\..\radiant\selection\SelectionMouseTools.h" />
     <ClInclude Include="..\..\radiant\settings\LocalisationModule.h" />
     <ClInclude Include="..\..\radiant\settings\LocalisationProvider.h" />
+    <ClInclude Include="..\..\radiant\settings\RenderingQualitySettings.h" />
     <ClInclude Include="..\..\radiant\settings\Win32Registry.h" />
     <ClInclude Include="..\..\radiant\textool\TexToolModeToggles.h" />
     <ClInclude Include="..\..\radiant\textool\TextureToolControl.h" />
@@ -502,6 +508,7 @@
     <ClInclude Include="..\..\radiant\ui\materials\MaterialChooser.h" />
     <ClInclude Include="..\..\radiant\ui\materials\MaterialPopulator.h" />
     <ClInclude Include="..\..\radiant\ui\materials\MaterialSelector.h" />
+    <ClInclude Include="..\..\radiant\ui\materials\MaterialThumbnailBrowser.h" />
     <ClInclude Include="..\..\radiant\ui\materials\MaterialTreeView.h" />
     <ClInclude Include="..\..\radiant\ui\mediabrowser\FocusMaterialRequest.h" />
     <ClInclude Include="..\..\radiant\ui\mediabrowser\MediaBrowserTreeView.h" />
@@ -601,6 +608,7 @@
     <ClInclude Include="..\..\radiant\ui\texturebrowser\TextureBrowserManager.h" />
     <ClInclude Include="..\..\radiant\ui\texturebrowser\TextureBrowserPanel.h" />
     <ClInclude Include="..\..\radiant\ui\texturebrowser\TextureDirectoryBrowser.h" />
+    <ClInclude Include="..\..\radiant\ui\terrain\TerrainGeneratorDialog.h" />
     <ClInclude Include="..\..\radiant\ui\texturebrowser\TextureThumbnailBrowser.h" />
     <ClInclude Include="..\..\radiant\ui\toolbar\ToolbarManager.h" />
     <ClInclude Include="..\..\radiant\ui\splash\Splash.h" />
